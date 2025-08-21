@@ -56,3 +56,27 @@ select CompanyName, OrderID
 from Orders join Shippers
 on shippers.shipperID = orders.shipvia
 where OrderID = 10275
+
+-- ต้องการรหัสพนักงาน ชื่อพนักงาน รหัสใบสั่งซื้อที่เกี่ยวข้อง เรียงตามลำดับพนักงาน
+SELECT e.EmployeeID, FirstName, OrderID
+FROM Employees as e JOIN Orders as o
+ON e.EmployeeID = o.EmployeeID
+ORDER BY EmployeeID
+
+-- ต้องการรหัสสินค้า เมือง และประเทศของบริษัทผู้จำหน่าย
+SELECT p.ProductID, p.ProductName, s.City, s.Country
+FROM Products as p JOIN Suppliers as s
+ON p.SupplierID = s.SupplierID
+
+-- ต้องการชื่อบริษํทขนส่งและจำนวนใบสั่งซื้อที่เกี่ยวข้อง
+SELECT s.CompanyName, COUNT(*) as NumberOfOrders
+FROM Shippers as s JOIN Orders as o
+ON s.ShipperID = o.ShipVia
+GROUP BY CompanyName
+
+-- ต้องการรหัสสินค้า ชื่อสินค้าและจำนวนทั้งหมดที่ขายได้
+SELECT p.ProductID, p.ProductName, SUM(Quantity) as TotalSold
+FROM Products as p JOIN [Order Details] as od
+ON p.ProductID = od.ProductID
+GROUP BY p.ProductID, p.ProductName
+ORDER BY 1
