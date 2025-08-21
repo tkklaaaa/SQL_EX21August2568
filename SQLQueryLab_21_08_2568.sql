@@ -50,3 +50,9 @@ select CompanyName, OrderID
 from Orders, Shippers
 where Shippers.ShipperID = Orders.ShipVia
 and orderID = 10275
+
+-- Join Operator
+select CompanyName, OrderID
+from Orders join Shippers
+on shippers.shipperID = orders.shipvia
+where OrderID = 10275
