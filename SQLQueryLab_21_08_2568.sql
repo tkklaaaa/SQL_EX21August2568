@@ -127,3 +127,10 @@ from Customers c join Orders o on c.CustomerID = o.CustomerID
 where c.CompanyName = 'Around the Horn'
 group by p.ProductID,p.ProductName
 order by 1
+
+-- ต้องการหมายเลขใบสั่งซื้อ ชื่อพนักงาน และยอดขายใบสั่งซื้อนั้น
+select o.OrderID, e.FirstName, sum((od.Quantity * od.UnitPrice * (1-od.Discount))) as TotalCast
+from Orders o join Employees e on o.EmployeeID = e.EmployeeID
+              join [Order Details] od on o.OrderID = od.OrderID
+group by o.OrderID, e.FirstName
+ORDER BY 1
