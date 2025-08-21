@@ -80,3 +80,39 @@ FROM Products as p JOIN [Order Details] as od
 ON p.ProductID = od.ProductID
 GROUP BY p.ProductID, p.ProductName
 ORDER BY 1
+
+-- join มากกว่า 2 ตาราง
+select o.OrderID เลขใบสั่งซื้อ, c.CompanyName ลูกค้า, e.FirstName ชื่อพนักงาน, o.ShipAddress ส่งไปที่
+from Orders o,Customers c,Employees e
+where o.CustomerID = c.CustomerID
+and o.EmployeeID = e.EmployeeID
+
+select o.OrderID เลขใบสั่งซื้อ, c.CompanyName ลูกค้า, e.FirstName ชื่อพนักงาน, o.ShipAddress ส่งไปที่
+from Orders o join Customers c on o.CustomerID = c.CustomerID
+              join Employees e on o.EmployeeID = e.EmployeeID
+
+-- ใช้ร่วมกับ Aggregate Function
+-- ต้องการรหัสพนักงาน ชื่อพนักงาน และจำนวนใบสั่งซื้อที่เกี่ยวข้อง ผลรวมของค่าขนส่ง ในปี 1998
+select e.EmployeeID, FirstName , count(*) as [จำนวน order], sum(freight) as [Sum of Freight]
+from Employees e join Orders o on e.EmployeeID = o.EmployeeID
+where year(orderdate) = 1998
+group by e.EmployeeID, FirstName
+
+ORDER BY 3 desc -- มาก - น้อย
+-- ORDER BY 3 asc -- น้อย - มาก
+
+-- ต้องการชื่อสินค้าที่ Nancy ขายได้ทั้งหมด เรียงตามลำดับรหัสสินค้า
+SELECT DISTINCT p.ProductID, p.ProductName
+from Employees e join Orders o on e.EmployeeID = o.EmployeeID
+                 join [Order Details] od on o.OrderID = od.OrderID
+                 join Products p on od.ProductID = p.ProductID
+where FirstName = 'Nancy'
+order by p.ProductID
+
+-- ต้องการชื่อบริษัทลูกค้าชื่อ Around the Horn ซื้อสินค้าที่มาจากประเทศอะไรบ้าง
+select distinct s.Country 
+from Customers c join Orders o on c.CustomerID = o.CustomerID
+                 join [Order Details] od on o.OrderID = od.OrderID
+                 join Products p on od.ProductID = p.ProductID
+                 join Suppliers s on p.SupplierID = s.SupplierID
+where c.CompanyName = 'Around the Horn' 
