@@ -101,6 +101,8 @@ group by e.EmployeeID, FirstName
 ORDER BY 3 desc -- มาก - น้อย
 -- ORDER BY 3 asc -- น้อย - มาก
 
+-- ** DISTINCT ข้อมูลที่แสดงออกมาซ้ำกันจะแสดงเพียง 1 แถว **
+
 -- ต้องการชื่อสินค้าที่ Nancy ขายได้ทั้งหมด เรียงตามลำดับรหัสสินค้า
 SELECT DISTINCT p.ProductID, p.ProductName
 from Employees e join Orders o on e.EmployeeID = o.EmployeeID
@@ -116,3 +118,12 @@ from Customers c join Orders o on c.CustomerID = o.CustomerID
                  join Products p on od.ProductID = p.ProductID
                  join Suppliers s on p.SupplierID = s.SupplierID
 where c.CompanyName = 'Around the Horn' 
+
+-- ต้องการชื่อบริษัทลูกค้าชื่อ Around the Horn ซื้อสินค้าอะไรบ้าง จำนวนเท่าใด
+select p.ProductID,p.ProductName, sum (Quantity) as TotalQuantity
+from Customers c join Orders o on c.CustomerID = o.CustomerID
+                 join [Order Details] od on o.OrderID = od.OrderID
+                 join Products p on od.ProductID = p.ProductID
+where c.CompanyName = 'Around the Horn'
+group by p.ProductID,p.ProductName
+order by 1
